@@ -1,0 +1,13 @@
+{
+  "name": "menu-excel",
+  "description": "Skill Claude : carte de restaurant -> Excel d'import articles caisse",
+  "owner": { "name": "UnidU" },
+  "plugins": [
+    {
+      "name": "menu-excel",
+      "source": "./",
+      "version": "1.1.0",
+      "description": "Carte client (photos, PDF, Excel, Word, .zip) -> Excel d'import articles Restomax / Plug&POS (51 colonnes), TVA et nommage."
+    }
+  ]
+}

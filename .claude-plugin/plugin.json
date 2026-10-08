@@ -1,0 +1,8 @@
+{
+  "name": "menu-excel",
+  "displayName": "Menu Excel — import articles caisse",
+  "version": "1.1.0",
+  "description": "Transforme la carte d'un restaurant (photos, PDF, Excel, Word, .zip) en fichier Excel d'import articles Restomax / Plug&POS (51 colonnes), avec TVA belge et nommage caisse.",
+  "author": { "name": "UnidU" },
+  "keywords": ["restomax", "plugandpos", "menu", "excel", "xlsx", "import", "articles", "caisse"]
+}
