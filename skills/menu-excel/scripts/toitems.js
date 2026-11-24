@@ -24,6 +24,9 @@ const shared=files['xl/sharedStrings.xml']?[...files['xl/sharedStrings.xml'].mat
 const sheet=files['xl/worksheets/sheet1.xml']||files[Object.keys(files).find(f=>/^xl\/worksheets\/[^/]+\.xml$/.test(f))];
 if(!sheet){console.error('Aucune feuille dans '+src);process.exit(1);}
 const out=[];
+// Colonnes reperees par leur en-tete (template BOW 20 col. comme ancien format 51 col.) ;
+// a defaut d'en-tete, positions de l'ancien format.
+let H={name_fr:'D',description_fr:'G',level1:'AB',vat_rate:'AF',vat_rate_takeaway:'AG',price_vat_included:'AH'};
 for(const r of sheet.matchAll(R('<@row\\b[^>]*>([\\s\\S]*?)</@row>'))){
  const cells={};
  for(const c of r[1].matchAll(R('<@c\\b([^>]*?)(?:/>|>([\\s\\S]*?)</@c>)'))){
@@ -33,8 +36,10 @@ for(const r of sheet.matchAll(R('<@row\\b[^>]*>([\\s\\S]*?)</@row>'))){
   if(t==='s')v=shared[+v];else if(t==='inlineStr')v=texts(body);else if(v!==undefined)v=un(v);
   if(v!==undefined)cells[ref]=String(v);
  }
- if(!cells.D||cells.D==='name_fr')continue;
- out.push({name:cells.D,desc:cells.G||'',cat:cells.AB||'SANS CATEGORIE',v1:Number(cells.AF),v2:Number(cells.AG),price:Number(cells.AH)||0});
+ if(Object.values(cells).some(v=>v.trim()==='name_fr')){H={};for(const k in cells)H[cells[k].trim()]=k;continue;}
+ const g=k=>cells[H[k]];
+ if(!g('name_fr'))continue;
+ out.push({name:g('name_fr'),desc:g('description_fr')||'',cat:g('level1')||'SANS CATEGORIE',v1:Number(g('vat_rate')),v2:Number(g('vat_rate_takeaway')),price:Number(g('price_vat_included'))||0});
 }
 const groups=[];
 for(const it of out){

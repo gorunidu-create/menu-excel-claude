@@ -6,8 +6,8 @@
     {
       "name": "menu-excel",
       "source": "./",
-      "version": "1.1.0",
-      "description": "Carte client (photos, PDF, Excel, Word, .zip) -> Excel d'import articles Restomax / Plug&POS (51 colonnes), TVA et nommage."
+      "version": "1.2.0",
+      "description": "Carte client (photos, PDF, Excel, Word, .zip) -> Excel d'import articles Restomax / Plug&POS (template BOW, 20 colonnes), TVA et nommage."
     }
   ]
 }

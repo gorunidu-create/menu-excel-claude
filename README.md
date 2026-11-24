@@ -1,7 +1,7 @@
 # Menu Excel pour Claude
 
 Une skill Claude qui transforme la **carte d'un restaurant** (photos, PDF, Excel, Word, .zip) en
-**fichier Excel d'import articles** pour la caisse Restomax / Plug&POS : 51 colonnes, TVA belge
+**fichier Excel d'import articles** pour la caisse Restomax / Plug&POS : template BOW 20 colonnes, TVA belge
 (nourriture 12/6, softs 21/6, alcool 21/21), libellés en majuscules sans accents, prix multiples
 éclatés (verre / bouteille, XL…), doublons évités.
 
@@ -9,7 +9,7 @@ On envoie la carte à Claude, on demande « fais-moi l'Excel menu », il lit, en
 fichier et liste ce qu'il faut vérifier.
 
 > Pas besoin de Claude pour un cas simple : la webapp
-> **https://menu-xlsx-web-unid-u.vercel.app** fait la même chose dans le navigateur.
+> **https://menu.unidu.be** fait la même chose dans le navigateur.
 
 **Prérequis** : [Node.js](https://nodejs.org) (version 18 ou plus) pour Claude Code. Rien d'autre :
 les scripts n'ont aucune dépendance.
@@ -55,7 +55,7 @@ Mise à jour : `/plugin marketplace update menu-excel`.
 | Chemin | Rôle |
 |---|---|
 | `skills/menu-excel/SKILL.md` | les consignes que suit Claude : lecture, TVA, nommage, pièges |
-| `skills/menu-excel/scripts/build.js` | `items.js` → `.xlsx` d'import (51 colonnes) |
+| `skills/menu-excel/scripts/build.js` | `items.js` → `.xlsx` d'import (template BOW, 20 colonnes) |
 | `skills/menu-excel/scripts/dump.js` | relit un `.xlsx` (vérification, ou carte livrée en Excel) |
 | `skills/menu-excel/scripts/pdftext.js` | texte d'un PDF |
 | `skills/menu-excel/scripts/docxtext.js` | texte d'une carte Word |
@@ -76,13 +76,15 @@ Seules ces colonnes sont remplies, le backoffice complète le reste :
 
 | Col. | Champ | Valeur |
 |---|---|---|
-| B | `active` | 1 |
-| C | `stock` | 0 |
-| D / E / F | `name_fr` / `name_nl` / `name_en` | le même libellé |
-| G | `description_fr` | facultatif |
-| AB | `level1` | catégorie |
-| AF / AG | `vat_rate` / `vat_rate_takeaway` | TVA sur place / à emporter |
-| AH | `price_vat_included` | prix TTC |
+| B | `active` | `oui / yes / ja` |
+| **C / D / E** | **`name_fr` / `name_nl` / `name_en`** | le même libellé |
+| **H** | **`level1`** | catégorie |
+| **I / J** | **`vat_rate` / `vat_rate_takeaway`** | TVA sur place / à emporter |
+| **K** | **`price_vat_included`** | prix TTC |
+| L | `description_fr` | facultatif |
+| Q | `stock` | `non / no / nee` |
+
+Format du **template officiel d'import articles BOW** (20 colonnes, feuilles `Sheet1` / `YES_NO` / `VAT`) ; en gras, les champs obligatoires.
 
 Les taux de TVA suivent la pratique belge pour l'HoReCa ; en cas de doute sur un produit, Claude
 le signale. À faire valider par le comptable du client pour les cas particuliers.

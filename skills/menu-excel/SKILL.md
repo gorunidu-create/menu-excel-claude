@@ -1,6 +1,6 @@
 ---
 name: menu-excel
-description: Crée le fichier Excel de menu (import articles Restomax / Plug&POS, 51 colonnes) à partir de la carte d'un restaurant, fournie en photos, PDF, Excel, Word ou .zip. À utiliser quand on demande « fais-moi un Excel menu », « encode la carte de <client> », « fichier d'import articles », ou qu'on envoie la carte d'un client pour la caisse.
+description: Crée le fichier Excel de menu (import articles Restomax / Plug&POS, template BOW 20 colonnes) à partir de la carte d'un restaurant, fournie en photos, PDF, Excel, Word ou .zip. À utiliser quand on demande « fais-moi un Excel menu », « encode la carte de <client> », « fichier d'import articles », ou qu'on envoie la carte d'un client pour la caisse.
 ---
 
 # Menu Excel — import articles caisse
@@ -15,7 +15,7 @@ aucune dépendance** (ni npm, ni Python, ni zip/unzip).
 - Claude app / claude.ai (skill importée) : passer le dossier de sortie en 3e argument,
   `/mnt/user-data/outputs`, puis donner le fichier à l'utilisateur.
 
-> **Sans Claude** : la même chose existe en webapp — **https://menu-xlsx-web-unid-u.vercel.app**.
+> **Sans Claude** : la même chose existe en webapp — **https://menu.unidu.be**.
 > On y dépose la carte (PDF, photos, Excel, Word, .zip, ou texte collé), l'outil devine catégories,
 > prix et TVA, on relit, on télécharge. Même fichier de sortie. La skill reste le bon choix pour une
 > carte manuscrite, une photo difficile ou un gros travail de nommage : la lecture par Claude y est
@@ -44,25 +44,30 @@ aucune dépendance** (ni npm, ni Python, ni zip/unzip).
    un article dont la TVA diffère de sa famille part dans une catégorie voisine (voir TVA).
 3. **Générer** : `node scripts/build.js <items.js> "MENU <CLIENT>" [dossier_sortie]`.
 4. **Vérifier** : `node scripts/dump.js "<chemin>.xlsx"` et relire le résultat (nombre d'articles,
-   prix, TVA, catégorie en `AB` sur **toutes** les lignes, aucun doublon de libellé).
+   prix, TVA, catégorie en `H` sur **toutes** les lignes, aucun doublon de libellé).
 5. **Rendre compte** : chemin du fichier, nombre d'articles par catégorie, et la liste des points à
    faire valider (prix illisibles, articles sans prix, TVA douteuse, formats devinés, libellés
    corrigés ou raccourcis).
 
 ## Colonnes remplies (et rien d'autre)
 
+Le fichier suit le **template officiel d'import articles BOW** (20 colonnes, feuilles `Sheet1`,
+`YES_NO` et `VAT`, listes déroulantes), figé dans `scripts/template.json`. Les en-têtes en **gras**
+sont les champs obligatoires.
+
 | Col. | Champ | Valeur |
 |------|-------|--------|
-| B | `active` | 1 |
-| C | `stock` | 0 |
-| D/E/F | `name_fr` / `name_nl` / `name_en` | le même libellé répété 3 fois |
-| G | `description_fr` | facultatif (composition, précisions) |
-| AB | `level1` | catégorie |
-| AF | `vat_rate` | TVA sur place |
-| AG | `vat_rate_takeaway` | TVA à emporter |
-| AH | `price_vat_included` | prix TTC |
+| B | `active` | `oui / yes / ja` (liste déroulante) |
+| **C/D/E** | **`name_fr` / `name_nl` / `name_en`** | le même libellé répété 3 fois |
+| **H** | **`level1`** | catégorie |
+| **I** | **`vat_rate`** | TVA sur place |
+| **J** | **`vat_rate_takeaway`** | TVA à emporter |
+| **K** | **`price_vat_included`** | prix TTC |
+| L | `description_fr` | facultatif (composition, précisions) |
+| Q | `stock` | `non / no / nee` (liste déroulante) |
 
-Aucun style, aucune formule, tout le reste vide : le backoffice complète.
+Aucune formule, tout le reste vide : le backoffice complète. `toitems.js` relit aussi les menus
+livrés dans l'ancien format 51 colonnes (colonnes repérées par leur en-tête).
 
 ## TVA — convention (Belgique)
 
